@@ -1,6 +1,6 @@
 from data import URBAN_ROUTES_URL
 from helpers import is_url_reachable
-
+from data import number_of_ice_creams
 
 class TestUrbanRoutes:
     # Task 4: Check the Server is on
@@ -44,7 +44,7 @@ class TestUrbanRoutes:
 
     # Task 5: Preparing the ice cream order
     def test_order_2_ice_creams(self):
-        for i in range(2):
+        for ice_cream in range(number_of_ice_creams):
             # Add in S8
             pass
 
