@@ -1,10 +1,4 @@
-# Retrieves Phone code. Do not change
-# File should be completely unchanged
-
 def retrieve_phone_code(driver) -> str:
-    """This code retrieves phone confirmation number and returns it as a string.
-    Use it when application waits for the confirmation code to pass it into your tests.
-    The phone confirmation code can only be obtained after it was requested in application."""
 
     import json
     import time
@@ -28,10 +22,8 @@ def retrieve_phone_code(driver) -> str:
         return code
 
 
-# Checks if Routes is up and running. Do not change
+# Checks if Routes is up and running.
 def is_url_reachable(url):
-    """Check if the URL can be reached. Pass the URL for Urban Routes as a parameter.
-    If it can be reached, it returns True, otherwise it returns False"""
 
     import ssl
     import urllib.request
@@ -42,7 +34,6 @@ def is_url_reachable(url):
         ssl_ctx.verify_mode = ssl.CERT_NONE
 
         with urllib.request.urlopen(url, context=ssl_ctx) as response:
-            # print("Response Status Code:", response.status) #for debugging purposes
             if response.status == 200:
                 return True
             else:
