@@ -24,20 +24,17 @@ class UrbanRoutesPage:
     ACTIVE_TARIFF_CARD = (By.CSS_SELECTOR, ".tcard.active")
 
     # Phone / login bottom
+    PHONE_BUTTON = (By.CLASS_NAME, "np-text")
     PHONE_FIELD = (By.ID, "phone")
     PHONE_NEXT_BUTTON = (By.XPATH,
                          "//button[contains(., 'Next')]")
     PHONE_CONFIRMATION_FIELD = (By.ID, "code")
 
     # Payment method bottom
-    PAYMENT_METHOD_BUTTON = (
-        By.XPATH,
-        "//div[contains(@class,'payment-picker')]"
-    )
-    ADD_CARD_BUTTON = (By.XPATH,
-                       "//div[contains(., 'Add card')]")
+    PAYMENT_METHOD_BUTTON = (By.CLASS_NAME, "pp-value-text")
+    ADD_CARD_BUTTON = (By.CLASS_NAME, "pp-plus")
     CARD_NUMBER_FIELD = (By.ID, "number")
-    CARD_CODE_FIELD = (By.ID, "code")
+    CARD_CODE_FIELD = (By.CSS_SELECTOR, "#code.card-input")
     CARD_LINK_BUTTON = (By.XPATH,
                         "//button[contains(., 'Link')]")
     PAYMENT_METHOD_VALUE = (
@@ -49,27 +46,22 @@ class UrbanRoutesPage:
     MESSAGE_FOR_DRIVER_FIELD = (By.ID, "comment")
 
     # Blanket & handkerchiefs plus/minuses
-    BLANKET_TOGGLE_INPUT = (
-        By.XPATH,
-        "//label[contains(., 'Blanket and handkerchiefs')]"
-        "/preceding-sibling::input[@type='checkbox']"
-    )
+    BLANKET_TOGGLE_INPUT = (By.CLASS_NAME, "switch-input")
+    BLANKET_TOGGLE_BUTTON = (By.CLASS_NAME, "switch")
 
     # Ice cream bottom
     ICE_CREAM_PLUS_BUTTON = (
         By.XPATH,
-        "//div[contains(., 'Ice cream')]/following-sibling::*"
-        "//button[contains(@class,'increase') or contains(., '+')]"
+        "//div[text()='Ice cream']/following-sibling::div//div[text() = '+']"
     )
     ICE_CREAM_COUNTER = (
         By.XPATH,
-        "//div[contains(., 'Ice cream')]/following-sibling::*"
-        "//*[contains(@class,'counter') or self::span or self::div]"
+        "//div[text()='Ice cream']/following-sibling::div"
+        "//div[contains(@class,'counter')]"
     )
 
     # Order / car search bottom
-    ORDER_BUTTON = (By.XPATH,
-                    "//button[contains(., 'Order')]")
+    ORDER_BUTTON = (By.XPATH, "//button[@class='smart-button']")
     CAR_SEARCH_MODAL = (
         By.XPATH,
         "//div[contains(@class, 'modal') or contains(@class,'order-modal')]"
@@ -118,6 +110,16 @@ class UrbanRoutesPage:
         return active_card.text
 
     # Confirming the phone number
+
+    def click_phone_number_button(self) -> None:
+        self.wait.until(
+            EC.element_to_be_clickable(self.PHONE_BUTTON)
+        ).click()
+
+    def get_saved_phone(self) -> str:
+        return self.wait.until(
+            EC.visibility_of_element_located(self.PHONE_BUTTON)
+        ).text
 
     def fill_phone_number(self, phone_number: str) -> None:
         phone = self.wait.until(
@@ -169,7 +171,7 @@ class UrbanRoutesPage:
 
     def get_payment_method_text(self) -> str:
         return self.wait.until(
-            EC.visibility_of_element_located(self.PAYMENT_METHOD_VALUE)
+            EC.visibility_of_element_located(self.PAYMENT_METHOD_BUTTON)
         ).text
 
     # Comment writing will go here
@@ -192,8 +194,11 @@ class UrbanRoutesPage:
         toggle = self.wait.until(
             EC.presence_of_element_located(self.BLANKET_TOGGLE_INPUT)
         )
+        button = self.wait.until(
+            EC.presence_of_element_located(self.BLANKET_TOGGLE_BUTTON)
+        )
         if not toggle.get_property("checked"):
-            toggle.click()
+            button.click()
 
     def is_blanket_selected(self) -> bool:
         toggle = self.driver.find_element(*self.BLANKET_TOGGLE_INPUT)

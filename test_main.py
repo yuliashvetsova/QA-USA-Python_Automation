@@ -1,3 +1,5 @@
+import data
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -75,7 +77,7 @@ class TestUrbanRoutes:
     # Inputting the phone number testing
     def test_filling_phone_number(self):
         self._start_order_with_supportive()
-
+        self.page.click_phone_number_button()
         self.page.fill_phone_number(PHONE_NUMBER)
 
         code = retrieve_phone_code(self.__class__.driver)
@@ -83,8 +85,8 @@ class TestUrbanRoutes:
         self.page.fill_phone_confirmation_code(code)
 
         # Trimming spaces to avoid UI misunderstanding
-        assert PHONE_NUMBER.replace(" ", "") in \
-            self.__class__.driver.page_source.replace(" ", "")
+        assert self.page.get_saved_phone() == data.PHONE_NUMBER
+        self.__class__.driver.page_source.replace(" ", "")
 
     # Adding a credit card testing
     def test_adding_credit_card(self):
