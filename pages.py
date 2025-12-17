@@ -54,11 +54,7 @@ class UrbanRoutesPage:
         By.XPATH,
         "//div[text()='Ice cream']/following-sibling::div//div[text() = '+']"
     )
-    ICE_CREAM_COUNTER = (
-        By.XPATH,
-        "//div[text()='Ice cream']/following-sibling::div"
-        "//div[contains(@class,'counter')]"
-    )
+    ICE_CREAM_COUNTER = (By.CLASS_NAME, "counter")
 
     # Order / car search bottom
     ORDER_BUTTON = (By.XPATH, "//button[@class='smart-button']")
@@ -210,13 +206,7 @@ class UrbanRoutesPage:
             plus.click()
 
     def get_ice_cream_count(self) -> int:
-        text = self.wait.until(
-            EC.visibility_of_element_located(self.ICE_CREAM_COUNTER)
-        ).text
-        try:
-            return int(text.split()[1])
-        except ValueError:
-            return 0
+        return int(self.driver.find_element(*self.ICE_CREAM_COUNTER).text)
 
     # Order and car search will go here
 
