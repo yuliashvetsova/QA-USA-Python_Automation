@@ -62,11 +62,7 @@ class UrbanRoutesPage:
 
     # Order / car search bottom
     ORDER_BUTTON = (By.XPATH, "//button[@class='smart-button']")
-    CAR_SEARCH_MODAL = (
-        By.XPATH,
-        "//div[contains(@class, 'modal') or contains(@class,'order-modal')]"
-        "[.//div[contains(., 'Car search')]]"
-    )
+    CAR_SEARCH_MODAL = (By.CLASS_NAME, "order-body")
 
     def open_base_page(self, url: str) -> None:
         self.driver.get(url)
@@ -218,7 +214,7 @@ class UrbanRoutesPage:
             EC.visibility_of_element_located(self.ICE_CREAM_COUNTER)
         ).text
         try:
-            return int(text.strip())
+            return int(text.split()[1])
         except ValueError:
             return 0
 
